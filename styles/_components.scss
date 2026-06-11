@@ -1,0 +1,127 @@
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: fixed;
+  z-index: 100;
+  top: 12px;
+  right: 30px;
+  left: 30px;
+  mix-blend-mode: difference;
+  font-size: 15px;
+
+  &-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+
+    h1 {
+      font-size: 15px;
+    }
+
+    span {
+      font-size: 10px;
+    }
+  }
+}
+
+.menu {
+  display: flex;
+  gap: 20px;
+
+  &-item {
+    position: relative;
+    font-weight: 400;
+    font-size: 15px;
+    letter-spacing: 0;
+    cursor: pointer;
+    perspective: 300px;
+    transform-style: preserve-3d;
+  }
+
+  &-item:hover {
+    .menu-item-text {
+      transform: translateY(-10px) rotateX(90deg);
+    }
+
+    .menu-item-text2 {
+      top: 0;
+      transform: translateZ(0) rotateX(0deg);
+    }
+  }
+
+  &-item-text {
+    display: inline-block;
+    transition-duration: 0.3s;
+  }
+
+  &-item-text2 {
+    position: absolute;
+    top: 10px;
+    right: 0;
+    transform: translateZ(20px) rotateX(90deg);
+    transform-origin: center center;
+    transition-duration: 0.3s;
+    pointer-events: none;
+  }
+
+  li .menu-text2.active {
+    text-decoration: line-through;
+  }
+}
+
+.word-wrap {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.word {
+  display: inline-block;
+}
+
+.page-overlay {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff; // 원하는 색으로
+  transform: translateY(100%);
+  pointer-events: none;
+}
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: fixed;
+  z-index: 100;
+  right: 20px;
+  bottom: 20px;
+  mix-blend-mode: difference;
+  color: #f0f0f0;
+
+  span {
+    display: block;
+    width: 4px;
+    height: 16px;
+    border: 1px solid currentcolor;
+    background-color: transparent;
+    transition: background-color 0.15s ease;
+
+    &.is-filled {
+      background-color: currentcolor;
+    }
+  }
+
+  &-text {
+    position: relative;
+    margin-left: 4px;
+    color: currentcolor;
+    font-size: 18px;
+    line-height: 20px;
+  }
+}

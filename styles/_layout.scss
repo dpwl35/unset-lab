@@ -1,0 +1,124 @@
+body {
+  background-color: #121813;
+  color: #fff;
+}
+
+.main {
+  > section {
+    padding-top: var(--padding-top);
+    min-height: 100vh;
+    background-color: #121813;
+  }
+}
+
+.marquee {
+  margin-top: 5vw;
+  width: 100%;
+
+  &-wrap {
+    display: flex;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  &-text {
+    flex-shrink: 0;
+    font-size: 200rem;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+}
+
+/* 아웃트로 */
+.main-outro {
+  display: flex;
+  position: sticky;
+  z-index: 1;
+  top: 0;
+  height: 100vh;
+  background-color: #121813;
+
+  > div {
+    flex: 1;
+  }
+
+  .service {
+    &-item {
+      display: flex;
+      opacity: 0.2;
+      align-items: center;
+      gap: 2rem;
+      height: 100px;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 1;
+      }
+
+      &-num {
+        font-size: 16px;
+      }
+
+      &-text {
+        display: inline-block;
+        font-weight: 400;
+        font-size: 3.7vw;
+        font-family: var(--font-inter), sans-serif;
+        text-transform: uppercase;
+      }
+    }
+  }
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+  padding: 15rem 20rem 20rem;
+  min-height: 100vh;
+  background-color: #f0f0f0;
+  color: #121813;
+  font-family: var(--font-inter), sans-serif;
+
+  &-text {
+    position: relative;
+    padding: 0;
+    width: 100%;
+    text-align: justify;
+    text-transform: uppercase;
+
+    &-en {
+      margin-bottom: 1rem;
+      font-weight: 500;
+      font-size: 3.7vw;
+      line-height: 3.32vw;
+      letter-spacing: -0.01em;
+    }
+
+    &-ko {
+      color: #666;
+      font-size: 1vw;
+    }
+  }
+
+  &-info {
+    font-size: 1vw;
+    font-family: var(--font-azeret-mono), monospace;
+    text-align: center;
+
+    i {
+      margin-right: 4px;
+      color: #a0a0a0;
+      font-size: 0.75vw;
+    }
+  }
+
+  .coordinates {
+    position: absolute;
+    bottom: 15rem;
+    left: 15rem;
+    font-size: 0.75vw;
+  }
+}

@@ -2,6 +2,7 @@
   "extends": ["stylelint-config-standard-scss"],
   "plugins": ["stylelint-order"],
   "rules": {
+    "number-max-precision": 5,
     "order/order": [
       { "type": "at-rule", "name": "include", "hasBlock": false },
       "declarations",
