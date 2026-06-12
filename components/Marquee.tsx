@@ -2,9 +2,13 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Marquee() {
   const wrapRef = useRef<HTMLDivElement>(null);
+  const parallaxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!wrapRef.current) return;
@@ -13,7 +17,6 @@ export default function Marquee() {
       wrapRef.current.querySelector<HTMLParagraphElement>(".marquee-text");
     if (!text) return;
 
-    // 텍스트 복제
     const clone = text.cloneNode(true) as HTMLElement;
     wrapRef.current.appendChild(clone);
 
@@ -25,26 +28,17 @@ export default function Marquee() {
       ease: "none",
       repeat: -1,
     });
-
-    gsap.to(wrapRef.current, {
-      y: -300,
-      ease: "none",
-      scrollTrigger: {
-        trigger: wrapRef.current,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
-      },
-    });
   }, []);
 
   return (
     <div className="marquee">
-      <div className="marquee-wrap" ref={wrapRef}>
-        <p className="marquee-text">
-          Reset*the*standards,Unset*the*limits.Reset the standards,Unset the
-          limits.Reset the standards,Unset the limits.
-        </p>
+      <div className="marquee-parallax" ref={parallaxRef}>
+        <div className="marquee-wrap" ref={wrapRef}>
+          <p className="marquee-text">
+            Reset*the*standards,Unset*the*limits.Reset the standards,Unset the
+            limits.Reset the standards,Unset the limits.&nbsp;
+          </p>
+        </div>
       </div>
     </div>
   );
