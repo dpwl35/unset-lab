@@ -82,7 +82,7 @@ export default function Scene() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const meshesRef = useRef<THREE.Mesh[]>([]);
   const [isFresnel, setIsFresnel] = useState(false);
-  const [selectedName, setSelectedName] = useState("item");
+  const [selectedMesh, setSelectedMesh] = useState<THREE.Mesh | null>(null);
 
   useEffect(() => {
     meshesRef.current.forEach((mesh) => {
@@ -178,7 +178,7 @@ export default function Scene() {
       const intersects = raycaster.intersectObjects(meshesRef.current);
 
       if (intersects.length > 0) {
-        setSelectedName(intersects[0].object.name);
+        setSelectedMesh(intersects[0].object as THREE.Mesh);
       }
     };
 
@@ -193,20 +193,27 @@ export default function Scene() {
 
   return (
     <div className="main-intro-wrap">
-      <button
-        className="main-intro-button"
-        onClick={() => setIsFresnel((prev) => !prev)}
-      >
-        <span>
-          {isFresnel ? "click me!: Normal canvas " : "click me! : X-Ray canvas"}
-        </span>
-      </button>
-      <p className="main-intro-item">
-        <span>{selectedName}</span>
-        <span>position.x/y/z </span>
-        <span>material.type </span>
-        <span>geometry.attributes.position.count </span>
-      </p>
+      <div className="main-intro-item">
+        <button
+          className="main-intro-button"
+          onClick={() => setIsFresnel((prev) => !prev)}
+        >
+          <span>
+            {isFresnel
+              ? "click me!: Normal canvas "
+              : "click me! : X-Ray canvas"}
+          </span>
+        </button>
+        <p>"Click an object to inspect"</p>
+        <p>object name : {selectedMesh?.name ?? "-"}</p>
+        <p>
+          x: {selectedMesh?.position.x.toFixed(2) ?? "-"} y:{" "}
+          {selectedMesh?.position.y.toFixed(2) ?? "-"} z:{" "}
+          {selectedMesh?.position.z.toFixed(2) ?? "-"}
+        </p>
+        <p>{(selectedMesh?.material as THREE.Material)?.type ?? "-"}</p>
+        <p>{selectedMesh?.geometry.attributes.position.count ?? "-"}</p>
+      </div>
       <canvas
         className="main-intro-canvas"
         ref={canvasRef}
