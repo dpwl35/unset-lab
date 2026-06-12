@@ -201,7 +201,12 @@ export default function Scene() {
           {isFresnel ? "click me!: Normal canvas " : "click me! : X-Ray canvas"}
         </span>
       </button>
-      <p className="main-intro-item">{selectedName}</p>
+      <p className="main-intro-item">
+        <span>{selectedName}</span>
+        <span>position.x/y/z </span>
+        <span>material.type </span>
+        <span>geometry.attributes.position.count </span>
+      </p>
       <canvas
         className="main-intro-canvas"
         ref={canvasRef}
