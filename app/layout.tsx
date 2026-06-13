@@ -5,6 +5,7 @@ import PageTransition from "@/components/PageTransition";
 import { Azeret_Mono, Inter, JetBrains_Mono } from "next/font/google";
 import Header from "@/components/Header";
 import SmoothScroll from "@/components/SmoothScroll";
+import LoadHandler from "@/components/LoadHandler";
 const azeretMono = Azeret_Mono({
   subsets: ["latin"],
   variable: "--font-azeret-mono",
@@ -39,8 +40,8 @@ export default function RootLayout({
       lang="ko"
       className={`${azeretMono.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
-      <SmoothScroll />
       <body>
+        <LoadHandler />
         <SmoothScroll />
         <Header />
         <PageTransition>{children}</PageTransition>
