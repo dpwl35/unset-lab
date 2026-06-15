@@ -1,3 +1,3 @@
 export default function Work() {
-  return <main>d</main>;
+  return <main className='work'>d</main>;
 }
