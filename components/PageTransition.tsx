@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
-import gsap from "gsap";
+import { useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
+import gsap from 'gsap';
 
 export default function PageTransition({
   children,
@@ -14,36 +14,31 @@ export default function PageTransition({
   const pathname = usePathname();
 
   useEffect(() => {
-    if (pathname === "/") return;
+    if (pathname === '/') return;
 
     const tl = gsap.timeline();
-
-    tl.set(overlayRef.current, { y: "100%" })
+    tl.set(contentRef.current, { opacity: 0 })
+      .set(overlayRef.current, { y: '100%' })
+      .to(overlayRef.current, { y: '0%', duration: 0.5, ease: 'power2.inOut' })
       .to(overlayRef.current, {
-        y: "0%",
+        y: '-100%',
         duration: 0.5,
-        ease: "power2.inOut",
+        ease: 'power2.inOut',
       })
-      .set(contentRef.current, { opacity: 0 })
-      .to(overlayRef.current, {
-        y: "-100%",
+      .to(contentRef.current, {
+        opacity: 1,
         duration: 0.5,
-        ease: "power2.inOut",
-      })
-      .to(
-        contentRef.current,
-        {
-          opacity: 1,
-          duration: 0.3,
-        },
-        "<",
-      );
+        onComplete: () =>
+          window.dispatchEvent(new Event('transition-complete')),
+      });
   }, [pathname]);
 
   return (
     <>
-      <div ref={overlayRef} className="page-overlay" />
-      <div ref={contentRef}>{children}</div>
+      <div ref={overlayRef} className='page-overlay' />
+      <div ref={contentRef} className='wrap'>
+        {children}
+      </div>
     </>
   );
 }
