@@ -1,9 +1,16 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
+import { useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
+import gsap from 'gsap';
+import GridOverlay from './GridOverlay';
+
+const manager = new THREE.LoadingManager();
+manager.onLoad = () => {
+  window.dispatchEvent(new Event('scene-ready'));
+};
 
 const fresnelMaterial = new THREE.ShaderMaterial({
   uniforms: {
@@ -69,14 +76,14 @@ const sphereClusterMaterial = new THREE.MeshStandardMaterial({
 });
 
 const mirrorObjects = [
-  "cylinder_stand_01",
-  "cylinder_stand_02",
-  "torus_glass_01",
-  "torus_glass_02",
-  "torus_02",
-  "sphere_03",
+  'cylinder_stand_01',
+  'cylinder_stand_02',
+  'torus_glass_01',
+  'torus_glass_02',
+  'torus_02',
+  'sphere_03',
 ];
-const darkObjects = ["sphere_stripe", "cube_black"];
+const darkObjects = ['sphere_stripe', 'cube_black'];
 
 export default function Scene() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -91,7 +98,7 @@ export default function Scene() {
       } else {
         if (mirrorObjects.includes(mesh.name)) mesh.material = mirrorMaterial;
         else if (darkObjects.includes(mesh.name)) mesh.material = darkMaterial;
-        else if (mesh.name === "sphere_cluster")
+        else if (mesh.name === 'sphere_cluster')
           mesh.material = sphereClusterMaterial;
         else mesh.material = mirrorMaterial;
       }
@@ -107,20 +114,22 @@ export default function Scene() {
       alpha: true,
       antialias: true,
     });
-    renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
+    const parent = canvas.parentElement!;
+    renderer.setSize(parent.offsetWidth, parent.offsetHeight);
+    // renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
 
     const scene = new THREE.Scene();
 
-    const rgbeLoader = new RGBELoader();
-    rgbeLoader.load("/studio_small_08_4k.hdr", (texture) => {
+    const rgbeLoader = new RGBELoader(manager); // manager 전달
+    rgbeLoader.load('/studio_small_08_4k.hdr', (texture) => {
       texture.mapping = THREE.EquirectangularReflectionMapping;
       scene.environment = texture;
     });
 
     const camera = new THREE.PerspectiveCamera(
       45,
-      canvas.offsetWidth / canvas.offsetHeight,
+      parent.offsetWidth / parent.offsetHeight,
       0.1,
       100,
     );
@@ -130,8 +139,8 @@ export default function Scene() {
 
     const initialYMap = new Map<THREE.Object3D, number>();
 
-    const loader = new GLTFLoader();
-    loader.load("/unsetlab-object.glb", (gltf) => {
+    const loader = new GLTFLoader(manager);
+    loader.load('/unsetlab-object.glb', (gltf) => {
       gltf.scene.traverse((child) => {
         if (child instanceof THREE.Mesh) {
           meshesRef.current.push(child);
@@ -142,16 +151,22 @@ export default function Scene() {
             child.material = mirrorMaterial;
           else if (darkObjects.includes(child.name))
             child.material = darkMaterial;
-          else if (child.name === "sphere_cluster")
+          else if (child.name === 'sphere_cluster')
             child.material = sphereClusterMaterial;
           else child.material = mirrorMaterial;
         }
       });
 
-      gltf.scene.position.set(0, 0.2, 0.4);
+      gltf.scene.position.set(0, -2, 0.4);
       gltf.scene.rotation.set(0.1885, -1.8221, -0.0628);
       gltf.scene.scale.set(1, 1, 1);
       scene.add(gltf.scene);
+
+      gsap.to(gltf.scene.position, {
+        y: 0.2,
+        duration: 1.2,
+        ease: 'power2.out',
+      });
     });
 
     const animate = () => {
@@ -182,50 +197,51 @@ export default function Scene() {
       }
     };
 
-    canvas.addEventListener("click", onClick);
+    canvas.addEventListener('click', onClick);
 
     // cleanup에 추가
     return () => {
-      canvas.removeEventListener("click", onClick);
+      canvas.removeEventListener('click', onClick);
       renderer.dispose();
     };
   }, []);
 
   return (
-    <div className="main-intro-wrap">
-      <div className="main-intro-item">
+    <div className='main-intro-wrap'>
+      <div className='main-intro-item'>
         <button
-          className="main-intro-button"
+          className='main-intro-button'
           onClick={() => setIsFresnel((prev) => !prev)}
         >
           <span>
             {isFresnel
-              ? "click me!: Normal canvas "
-              : "click me! : X-Ray canvas"}
+              ? 'click me!: Normal canvas '
+              : 'click me! : X-Ray canvas'}
           </span>
         </button>
         <p>"Click an object to inspect"</p>
-        <p>object name : {selectedMesh?.name ?? "-"}</p>
+        <p>object name : {selectedMesh?.name ?? '-'}</p>
         <p>
-          x: {selectedMesh?.position.x.toFixed(2) ?? "-"} y:{" "}
-          {selectedMesh?.position.y.toFixed(2) ?? "-"} z:{" "}
-          {selectedMesh?.position.z.toFixed(2) ?? "-"}
+          x: {selectedMesh?.position.x.toFixed(2) ?? '-'} y:{' '}
+          {selectedMesh?.position.y.toFixed(2) ?? '-'} z:{' '}
+          {selectedMesh?.position.z.toFixed(2) ?? '-'}
         </p>
-        <p>{(selectedMesh?.material as THREE.Material)?.type ?? "-"}</p>
-        <p>{selectedMesh?.geometry.attributes.position.count ?? "-"}</p>
+        <p>{(selectedMesh?.material as THREE.Material)?.type ?? '-'}</p>
+        <p>{selectedMesh?.geometry.attributes.position.count ?? '-'}</p>
       </div>
       <canvas
-        className="main-intro-canvas"
+        className='main-intro-canvas'
         ref={canvasRef}
         style={{
-          position: "absolute",
+          position: 'absolute',
           top: 0,
           left: 0,
-          width: "100%",
-          height: "100%",
-          pointerEvents: "auto",
+          width: '100%',
+          height: '100%',
+          pointerEvents: 'auto',
         }}
       />
+      <GridOverlay />
     </div>
   );
 }
