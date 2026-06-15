@@ -1,33 +1,34 @@
 // app/layout.tsx
-import type { Metadata } from "next";
-import "@/styles/style.scss";
-import PageTransition from "@/components/PageTransition";
-import { Azeret_Mono, Inter, JetBrains_Mono } from "next/font/google";
-import Header from "@/components/Header";
-import SmoothScroll from "@/components/SmoothScroll";
-import LoadHandler from "@/components/LoadHandler";
+import type { Metadata } from 'next';
+import '@/styles/style.scss';
+import PageTransition from '@/components/PageTransition';
+import { Azeret_Mono, Inter, JetBrains_Mono } from 'next/font/google';
+import Header from '@/components/Header';
+import SmoothScroll from '@/components/SmoothScroll';
+import LoadHandler from '@/components/LoadHandler';
+import Loader from '@/components/Loader';
 const azeretMono = Azeret_Mono({
-  subsets: ["latin"],
-  variable: "--font-azeret-mono",
+  subsets: ['latin'],
+  variable: '--font-azeret-mono',
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "Unset Lab",
-    template: "%s | Unset Lab",
+    default: 'Unset Lab',
+    template: '%s | Unset Lab',
   },
-  description: "Unset Lab — Creative Web Agency",
+  description: 'Unset Lab — Creative Web Agency',
 };
 
 const inter = Inter({
-  subsets: ["latin"],
-  weight: ["700", "800", "900"],
-  variable: "--font-inter",
+  subsets: ['latin'],
+  weight: ['700', '800', '900'],
+  variable: '--font-inter',
 });
 
 const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
 });
 
 export default function RootLayout({
@@ -37,11 +38,10 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="ko"
+      lang='ko'
       className={`${azeretMono.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body>
-        <LoadHandler />
         <SmoothScroll />
         <Header />
         <PageTransition>{children}</PageTransition>
