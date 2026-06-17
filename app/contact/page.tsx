@@ -22,6 +22,22 @@ export default function Contact() {
   const [isFinal, setIsFinal] = useState(false);
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
   const numRef = useRef<HTMLSpanElement>(null);
+  const marqueeRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    if (!marqueeRef.current) return;
+    const text = marqueeRef.current;
+    const clone = text.cloneNode(true) as HTMLElement;
+    text.parentElement?.appendChild(clone);
+    const totalWidth = text.offsetWidth;
+
+    gsap.to([text, clone], {
+      x: `-=${totalWidth}`,
+      duration: 100,
+      ease: 'none',
+      repeat: -1,
+    });
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -121,6 +137,16 @@ export default function Contact() {
 
   return (
     <main className='contact'>
+      <div className='contact-marquee'>
+        <p ref={marqueeRef}>
+          Unset Lab is an interactive web agency that resets the conventions of
+          the web and explores new possibilities at the intersection of code and
+          design. We go beyond static screens — crafting digital experiences
+          that leave a lasting impression through expressive scroll interactions
+          and fluid motion, designed and built with meticulous attention to
+          detail.
+        </p>
+      </div>
       <div className='contact-top'>
         <div className='contact-top-wrap'>
           <div className='contact-top-head'>
