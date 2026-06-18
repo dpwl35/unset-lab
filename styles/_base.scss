@@ -38,9 +38,10 @@ a {
 html,
 body {
   width: 100%;
-  font-family: var(--font-azeret-mono), monospace;
+  font-family: var(--font-azeret-mono), var(--font-inter), sans-serif;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  letter-spacing: -0.1;
 }
 
 html::-webkit-scrollbar,

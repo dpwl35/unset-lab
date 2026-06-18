@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,7 +14,7 @@ export default function Marquee() {
     if (!wrapRef.current) return;
 
     const text =
-      wrapRef.current.querySelector<HTMLParagraphElement>(".marquee-text");
+      wrapRef.current.querySelector<HTMLParagraphElement>('.marquee-text');
     if (!text) return;
 
     const clone = text.cloneNode(true) as HTMLElement;
@@ -24,17 +24,17 @@ export default function Marquee() {
 
     gsap.to(wrapRef.current, {
       x: `-=${totalWidth}`,
-      duration: 250,
-      ease: "none",
+      duration: 30,
+      ease: 'none',
       repeat: -1,
     });
   }, []);
 
   return (
-    <div className="marquee">
-      <div className="marquee-parallax" ref={parallaxRef}>
-        <div className="marquee-wrap" ref={wrapRef}>
-          <p className="marquee-text">
+    <div className='marquee'>
+      <div className='marquee-parallax' ref={parallaxRef}>
+        <div className='marquee-wrap' ref={wrapRef}>
+          <p className='marquee-text'>
             Reset*the*standards,Unset*the*limits.Reset the standards,Unset the
             limits.Reset the standards,Unset the limits.&nbsp;
           </p>
