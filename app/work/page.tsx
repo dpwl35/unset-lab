@@ -37,11 +37,6 @@ const positions = [
 ];
 
 export default function Work() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [view, setView] = useState<'spiral' | 'list'>('spiral');
-  const [selectedWork, setSelectedWork] = useState<(typeof works)[0] | null>(
-    null,
-  );
   const imgRefs = useRef<(HTMLLIElement | null)[]>([]);
   const hoveredIndexRef = useRef<number | null>(null);
   const listItemRefs = useRef<(HTMLLIElement | null)[]>([]);
@@ -50,9 +45,12 @@ export default function Work() {
   const dragStart = useRef({ x: 0, y: 0 });
   const canvasPos = useRef({ x: 0, y: 0 });
   const didDrag = useRef(false);
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const infoRefs = useRef<(HTMLDivElement | null)[]>([]);
   const scaleRef = useRef(1);
+
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [view, setView] = useState<'spiral' | 'list'>('spiral');
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (view === 'list') {
@@ -80,11 +78,21 @@ export default function Work() {
   const minY = Math.min(...positions.map((p) => p.y)) - PADDING;
   const maxY = Math.max(...positions.map((p) => p.y)) + PADDING;
 
+  const velocity = useRef({ x: 0, y: 0 });
+  const lastPos = useRef({ x: 0, y: 0 });
+  const rafId = useRef<number | null>(null);
+
   const handleMouseMove = (e: React.MouseEvent) => {
     setMousePos({ x: e.clientX, y: e.clientY });
 
     if (isDragging.current && canvasRef.current) {
       didDrag.current = true;
+      velocity.current = {
+        x: e.clientX - lastPos.current.x,
+        y: e.clientY - lastPos.current.y,
+      };
+      lastPos.current = { x: e.clientX, y: e.clientY };
+
       const dx = e.clientX - dragStart.current.x;
       const dy = e.clientY - dragStart.current.y;
       const newX = Math.min(-minX, Math.max(-maxX, canvasPos.current.x + dx));
@@ -131,6 +139,9 @@ export default function Work() {
     isDragging.current = true;
     didDrag.current = false;
     dragStart.current = { x: e.clientX, y: e.clientY };
+    lastPos.current = { x: e.clientX, y: e.clientY };
+    velocity.current = { x: 0, y: 0 };
+    if (rafId.current) cancelAnimationFrame(rafId.current);
   };
 
   const handleMouseUp = (e: React.MouseEvent) => {
@@ -142,6 +153,34 @@ export default function Work() {
       canvasPos.current.x = newX;
       canvasPos.current.y = newY;
       canvasRef.current.style.transform = `translate(${newX}px, ${newY}px) scale(${scaleRef.current})`;
+
+      // 관성 시작
+      if (rafId.current) cancelAnimationFrame(rafId.current);
+      const inertia = () => {
+        velocity.current.x *= 0.92;
+        velocity.current.y *= 0.92;
+
+        if (
+          Math.abs(velocity.current.x) < 0.1 &&
+          Math.abs(velocity.current.y) < 0.1
+        )
+          return;
+
+        canvasPos.current.x = Math.min(
+          -minX,
+          Math.max(-maxX, canvasPos.current.x + velocity.current.x),
+        );
+        canvasPos.current.y = Math.min(
+          -minY,
+          Math.max(-maxY, canvasPos.current.y + velocity.current.y),
+        );
+
+        if (canvasRef.current) {
+          canvasRef.current.style.transform = `translate(${canvasPos.current.x}px, ${canvasPos.current.y}px) scale(${scaleRef.current})`;
+        }
+        rafId.current = requestAnimationFrame(inertia);
+      };
+      rafId.current = requestAnimationFrame(inertia);
     }
     isDragging.current = false;
   };
