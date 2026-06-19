@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import CameraScene from '@/components/CameraScene';
@@ -10,6 +10,34 @@ gsap.registerPlugin(ScrollTrigger);
 export default function AboutWrap() {
   const spanRef = useRef<HTMLSpanElement>(null);
   const cameraCanvasRef = useRef<HTMLCanvasElement>(null);
+  const [time, setTime] = useState('');
+
+  useEffect(() => {
+    const update = () => {
+      const now = new Date();
+      const month = [
+        'JAN',
+        'FEB',
+        'MAR',
+        'APR',
+        'MAY',
+        'JUN',
+        'JUL',
+        'AUG',
+        'SEP',
+        'OCT',
+        'NOV',
+        'DEC',
+      ][now.getMonth()];
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      const ss = String(now.getSeconds()).padStart(2, '0');
+      setTime(`${month} ${hh}:${mm}:${ss}`);
+    };
+    update();
+    const id = setInterval(update, 1000);
+    return () => clearInterval(id);
+  }, []);
 
   useEffect(() => {
     if (!spanRef.current) return;
@@ -42,9 +70,9 @@ export default function AboutWrap() {
           <canvas className='camera-canvas' ref={cameraCanvasRef}></canvas>
           <CameraScene canvasRef={cameraCanvasRef} />
           <div className='camera-view'>
-            <span className='camera-time'>
-              <i></i>REC 00:34:28
-            </span>
+            <p className='camera-time'>
+              <i></i> {time}
+            </p>
             {['one', 'two', 'three', 'four'].map((pos) => (
               <span key={pos} className={`camera-corner ${pos}`} />
             ))}
@@ -85,10 +113,10 @@ export default function AboutWrap() {
           브랜드의 서사를 담아 독창적으로 실험합니다.
         </div>
         <div className='main-about-columns'>
-          02. 정교한 퍼블리싱 기술 (Craftsmanship in Code) 화려한 비주얼은
-          탄탄한 구조 위에서만 완벽해집니다. 시맨틱 마크업의 정갈함과 최적화된
-          스크롤 라이브러리, 그리고 GPU 가속 기술을 활용하여 어떤 브라우저
-          환경에서도 끊김 없이 부드러운 하이엔드 디지털 경험을 선사합니다.
+          02. 정교한 기술 (Craftsmanship in Code) 화려한 비주얼은 탄탄한 구조
+          위에서만 완벽해집니다. 시맨틱 마크업의 정갈함과 최적화된 스크롤
+          라이브러리, 그리고 GPU 가속 기술을 활용하여 어떤 브라우저 환경에서도
+          끊김 없이 부드러운 하이엔드 디지털 경험을 선사합니다.
         </div>
         <div className='main-about-columns'>
           03. 경계를 허무는 협업 (Seamless Convergence) 기획, 디자인, 그리고

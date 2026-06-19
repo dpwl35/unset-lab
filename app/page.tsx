@@ -2,6 +2,7 @@ import AboutWrap from '@/components/AboutWrap';
 import Footer from '@/components/Footer';
 import IntroDown from '@/components/IntroDown';
 import Marquee from '@/components/Marquee';
+import Outro from '@/components/Outro';
 import Progress from '@/components/Progress';
 import Scene from '@/components/Scene';
 import ServiceList from '@/components/ServiceList';
@@ -23,13 +24,14 @@ export default function Home() {
       </section>
       <section className='main-work'>
         <div className='main-work-wrap'>
-          <div className='main-work-top'>
-            <p>WORK LIST</p>
-          </div>
           <Work />
         </div>
       </section>
-      <section className='main-outro'>{/* <Marquee /> */} 마지막</section>
+      <section className='main-outro'>
+        {/* <Marquee /> */}
+        <Outro />
+      </section>
+      <div className='main-outro-spacer' />
       <Footer />
       <Progress />
     </main>

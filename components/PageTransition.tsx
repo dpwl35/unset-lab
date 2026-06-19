@@ -13,8 +13,11 @@ export default function PageTransition({
   const bottomRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
+    if (pathname === '/') return; // 메인 페이지일 때만 스킵
+
     const top = document.querySelector('.page-overlay-top') as HTMLElement;
     const bottom = document.querySelector(
       '.page-overlay-bottom',

@@ -25,7 +25,8 @@ export default function Header() {
 
   return (
     <header className='header'>
-      <div className='header-time'>{time}</div>
+      {/* <div className='header-time'>{time}</div> */}
+      <div>***</div>
       <div className='header-logo'>
         <Link href='/'>
           <h1>UNSET LAB</h1>

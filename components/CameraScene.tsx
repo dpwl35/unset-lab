@@ -8,6 +8,10 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
+
 const DitherShader = {
   uniforms: {
     tDiffuse: { value: null },
@@ -86,8 +90,9 @@ export default function CameraScene({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const w = canvas.offsetWidth;
-    const h = canvas.offsetHeight;
+    const parent = canvas.parentElement!;
+    const w = parent.offsetWidth;
+    const h = parent.offsetHeight;
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
@@ -108,7 +113,7 @@ export default function CameraScene({
     dirLight.position.set(2, 2, 2);
     scene.add(dirLight);
 
-    const renderTarget = new THREE.WebGLRenderTarget(w, h, {
+    let renderTarget = new THREE.WebGLRenderTarget(w, h, {
       format: THREE.RGBAFormat,
       type: THREE.UnsignedByteType,
     });
@@ -134,7 +139,20 @@ export default function CameraScene({
           const box = new THREE.Box3().setFromObject(mesh);
           const center = box.getCenter(new THREE.Vector3());
           mesh.position.sub(center);
+
+          mesh.position.y -= 2; // 초기 위치 아래로
           scene.add(mesh);
+
+          gsap.to(mesh.position, {
+            y: 0,
+            duration: 3.2,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: '.main-about-camera',
+              start: 'top bottom',
+              toggleActions: 'play none none reverse',
+            },
+          });
         }
       });
     });
@@ -144,6 +162,20 @@ export default function CameraScene({
     controls.enablePan = false;
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
+
+    const handleResize = () => {
+      const newW = parent.offsetWidth;
+      const newH = parent.offsetHeight;
+
+      renderer.setSize(newW, newH);
+      composer.setSize(newW, newH);
+      ditherPass.uniforms.resolution.value.set(newW, newH);
+
+      camera.aspect = newW / newH;
+      camera.updateProjectionMatrix();
+    };
+
+    window.addEventListener('resize', handleResize);
 
     let animId: number;
     const animate = () => {
@@ -156,6 +188,7 @@ export default function CameraScene({
 
     return () => {
       cancelAnimationFrame(animId);
+      window.removeEventListener('resize', handleResize);
       controls.dispose();
       renderer.dispose();
     };

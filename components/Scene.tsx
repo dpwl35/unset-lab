@@ -169,6 +169,15 @@ export default function Scene() {
       });
     });
 
+    const handleResize = () => {
+      const w = parent.offsetWidth;
+      const h = parent.offsetHeight;
+      renderer.setSize(w, h);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    };
+    window.addEventListener('resize', handleResize);
+
     const animate = () => {
       requestAnimationFrame(animate);
       const t = Date.now() * 0.001;
@@ -202,6 +211,7 @@ export default function Scene() {
     // cleanup에 추가
     return () => {
       canvas.removeEventListener('click', onClick);
+      window.removeEventListener('resize', handleResize);
       renderer.dispose();
     };
   }, []);

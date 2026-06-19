@@ -9,6 +9,14 @@ body {
   position: relative;
 }
 
+.page-overlay-top {
+  transform: translateY(-100%); // 기본은 안 보임
+}
+
+.page-overlay-bottom {
+  transform: translateY(100%);
+}
+
 .main {
   > section {
     padding: var(--layout-padding);
@@ -334,8 +342,9 @@ body {
 
   &-text {
     margin: 0 auto;
-    margin-top: 10vh;
+    padding-top: 10vh;
     letter-spacing: -1px;
+    text-align: center;
   }
 }
 
@@ -350,6 +359,7 @@ body {
   position: sticky;
   z-index: 1;
   top: 0;
+  padding: 0 !important;
   height: 100vh;
   background-color: #121813;
   color: #fff;
@@ -358,31 +368,36 @@ body {
     flex: 1;
   }
 
-  .service {
-    &-item {
-      display: flex;
-      opacity: 0.2;
-      align-items: center;
-      gap: 2rem;
-      height: 100px;
-      cursor: pointer;
-
-      &:hover {
-        opacity: 1;
-      }
-
-      &-num {
-        font-size: 16px;
-      }
-
-      &-text {
-        display: inline-block;
-        font-weight: 400;
-        font-size: 3.7vw;
-        text-transform: uppercase;
-      }
-    }
+  &-wrap {
+    width: 100%;
+    height: 100%;
   }
+
+  // .service {
+  //   &-item {
+  //     display: flex;
+  //     opacity: 0.2;
+  //     align-items: center;
+  //     gap: 2rem;
+  //     height: 100px;
+  //     cursor: pointer;
+
+  //     &:hover {
+  //       opacity: 1;
+  //     }
+
+  //     &-num {
+  //       font-size: 16px;
+  //     }
+
+  //     &-text {
+  //       display: inline-block;
+  //       font-weight: 400;
+  //       font-size: 3.7vw;
+  //       text-transform: uppercase;
+  //     }
+  //   }
+  // }
 }
 
 .work {
@@ -766,4 +781,8 @@ body {
     left: 30px;
     font-size: 1vw;
   }
+}
+
+.main-outro-spacer {
+  height: 100vh; // 추가 스크롤 여유
 }

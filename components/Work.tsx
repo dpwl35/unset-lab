@@ -1,7 +1,11 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 import { works } from '@/data/works';
+
+gsap.registerPlugin(ScrollTrigger);
 
 function PixelateImg({ src, isHovered }: { src: string; isHovered: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -69,37 +73,63 @@ function PixelateImg({ src, isHovered }: { src: string; isHovered: boolean }) {
 
 export default function MainWork() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const topRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!topRef.current) return;
+
+    gsap.fromTo(
+      topRef.current,
+      { y: 50, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.5,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.main-work-list',
+          start: 'top bottom',
+          toggleActions: 'play none none reverse',
+        },
+      },
+    );
+  }, []);
 
   return (
-    <ul className='main-work-list'>
-      {works.map((work) => {
-        const words = work.title.split(' ');
-        const hasMultipleWords = words.length > 1;
-        const firstWord = words[0];
-        const restWords = words.slice(1).join(' ');
+    <>
+      <div className='main-work-top' ref={topRef}>
+        <p>WORK LIST</p>
+      </div>
+      <ul className='main-work-list'>
+        {works.map((work) => {
+          const words = work.title.split(' ');
+          const hasMultipleWords = words.length > 1;
+          const firstWord = words[0];
+          const restWords = words.slice(1).join(' ');
 
-        return (
-          <li
-            key={work.id}
-            className='main-work-item'
-            onMouseEnter={() => setHoveredId(work.id)}
-            onMouseLeave={() => setHoveredId(null)}
-          >
-            <div className='main-work-text'>
-              <span className='main-work-title'>{firstWord}</span>
-              <div className='main-work-img'>
-                <PixelateImg
-                  src={`/images/${work.id}.jpg`}
-                  isHovered={hoveredId === work.id}
-                />
+          return (
+            <li
+              key={work.id}
+              className='main-work-item'
+              onMouseEnter={() => setHoveredId(work.id)}
+              onMouseLeave={() => setHoveredId(null)}
+            >
+              <div className='main-work-text'>
+                <span className='main-work-title'>{firstWord}</span>
+                <div className='main-work-img'>
+                  <PixelateImg
+                    src={`/images/${work.id}.jpg`}
+                    isHovered={hoveredId === work.id}
+                  />
+                </div>
+                {hasMultipleWords && (
+                  <span className='main-work-title'>{restWords}</span>
+                )}
               </div>
-              {hasMultipleWords && (
-                <span className='main-work-title'>{restWords}</span>
-              )}
-            </div>
-          </li>
-        );
-      })}
-    </ul>
+            </li>
+          );
+        })}
+      </ul>
+    </>
   );
 }
