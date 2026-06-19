@@ -12,11 +12,21 @@
   font-size: 15px;
   transform: translateZ(0);
 
+  @media (width <= 500px) {
+    div:first-of-type {
+      display: none;
+    }
+  }
+
   &-logo {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 4px;
+
+    @media (width <= 500px) {
+      align-items: flex-start;
+    }
 
     h1 {
       font-size: 18px;
@@ -24,6 +34,7 @@
 
     span {
       font-size: 10px;
+      white-space: nowrap;
     }
   }
 }
@@ -135,6 +146,11 @@
   mix-blend-mode: difference;
   color: #f0f0f0;
 
+  @media (width <= 500px) {
+    right: 0;
+    scale: 0.7;
+  }
+
   span {
     display: block;
     width: 4px;
@@ -214,6 +230,10 @@
 
     :hover .main-work-img {
       width: 15em;
+
+      @media (width <= 500px) {
+        width: 5em;
+      }
     }
   }
 }

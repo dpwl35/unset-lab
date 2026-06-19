@@ -145,11 +145,11 @@ export default function CameraScene({
 
           gsap.to(mesh.position, {
             y: 0,
-            duration: 3.2,
+            duration: 1,
             ease: 'power2.out',
             scrollTrigger: {
               trigger: '.main-about-camera',
-              start: 'top bottom',
+              start: 'top center',
               toggleActions: 'play none none reverse',
             },
           });

@@ -28,7 +28,9 @@ body {
 }
 
 .main-intro {
+  overflow-x: hidden;
   position: relative;
+  width: 100%;
   height: 115vh;
   background-color: #fff;
 
@@ -123,6 +125,10 @@ body {
     text-align: justify;
     text-transform: uppercase;
 
+    @media (width <= 500px) {
+      font-size: 1rem;
+    }
+
     span {
       display: inline-block;
       width: 12vw;
@@ -159,6 +165,12 @@ body {
       bottom: -5rem;
       width: 100%;
 
+      @media (width <= 500px) {
+        flex-direction: column;
+        bottom: -8rem;
+        font-size: 0.75rem;
+      }
+
       label {
         display: flex;
         gap: 1rem;
@@ -173,6 +185,10 @@ body {
         background: var(--color-light);
         appearance: none;
         cursor: pointer;
+
+        @media (width <= 500px) {
+          top: 7px;
+        }
 
         &::-webkit-slider-thumb {
           width: 8px;
@@ -329,6 +345,10 @@ body {
       bottom: 0.5rem;
       left: 50%;
       transform: translate(-50%, -50%);
+
+      @media (width <= 500px) {
+        font-size: 0.5rem;
+      }
     }
   }
 
@@ -338,6 +358,15 @@ body {
     gap: 2rem;
     margin-top: 20vh;
     text-align: justify;
+
+    @media (width <= 768px) {
+      grid-template-rows: repeat(3, 1fr);
+      grid-template-columns: 1fr;
+    }
+
+    @media (width <= 500px) {
+      font-size: 0.75rem;
+    }
   }
 
   &-text {
@@ -345,6 +374,10 @@ body {
     padding-top: 10vh;
     letter-spacing: -1px;
     text-align: center;
+
+    @media (width <= 500px) {
+      font-size: 0.75rem;
+    }
   }
 }
 
@@ -459,6 +492,7 @@ body {
         padding: 0 4px;
         background-color: var(--color-ink);
         color: #f0f0f0;
+        white-space: nowrap;
       }
     }
 
@@ -505,8 +539,9 @@ body {
     }
 
     &-title {
-      font-size: 5rem;
+      font-size: var(--work-text);
       line-height: 4rem;
+      white-space: nowrap;
     }
 
     &-item {
@@ -647,6 +682,13 @@ body {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      margin-bottom: 1rem;
+
+      @media (width <= 500px) {
+        p {
+          font-size: 0.75rem;
+        }
+      }
     }
 
     &-wrap {
@@ -654,10 +696,22 @@ body {
       width: 40%;
       border: 1px solid #666;
       border-bottom: none;
+
+      @media (width <= 1440px) {
+        width: 65%;
+      }
+
+      @media (width <= 1024px) {
+        width: 80%;
+      }
+
+      @media (width <= 500px) {
+        padding: 1.5rem;
+        width: 90%;
+      }
     }
 
     h2 {
-      margin-bottom: 1rem;
       padding: 0 4px;
       width: fit-content;
       background-color: #121813;
@@ -666,19 +720,27 @@ body {
       font-size: 1rem;
       letter-spacing: -0.8;
       text-align: center;
+
+      @media (width <= 500px) {
+        font-size: 0.75rem;
+      }
     }
   }
 
   &-typing {
     display: flex;
     align-items: flex-end;
-    font-size: 3.25rem;
+    font-size: var(--typing-text);
 
     &-service {
       letter-spacing: -2px;
 
       &.close {
         font-size: 2rem;
+
+        @media (width <= 500px) {
+          font-size: 1rem;
+        }
       }
     }
 
@@ -706,7 +768,7 @@ body {
 
     &-item {
       overflow: hidden;
-      font-size: 3.25rem;
+      font-size: var(--typing-text);
     }
 
     &-num {
@@ -722,6 +784,10 @@ body {
     width: 100%;
     background-color: #fff;
     font-size: 1rem;
+
+    @media (width <= 500px) {
+      font-size: 0.75rem;
+    }
 
     p {
       flex-shrink: 0;
@@ -752,26 +818,26 @@ body {
     &-en {
       margin-bottom: 1rem;
       font-weight: 500;
-      font-size: 3.9vw;
-      line-height: 3.4vw;
+      font-size: var(--footer-en);
+      line-height: var(--footer-en);
       letter-spacing: -0.01em;
     }
 
     &-ko {
       color: #666;
-      font-size: 1vw;
+      font-size: var(--footer-ko);
     }
   }
 
   &-info {
-    font-size: 1vw;
+    font-size: var(--footer-text);
     font-family: var(--font-azeret-mono), monospace;
     text-align: center;
 
     i {
       margin-right: 4px;
       color: #a0a0a0;
-      font-size: 0.75vw;
+      font-size: var(--footer-i);
     }
   }
 
@@ -779,7 +845,7 @@ body {
     position: absolute;
     bottom: 20px;
     left: 30px;
-    font-size: 1vw;
+    font-size: var(--footer-ko);
   }
 }
 
