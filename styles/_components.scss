@@ -23,6 +23,7 @@
     flex-direction: column;
     align-items: center;
     gap: 4px;
+    position: relative;
 
     @media (width <= 500px) {
       align-items: flex-start;
@@ -35,6 +36,12 @@
     span {
       font-size: 10px;
       white-space: nowrap;
+
+      @media (width <= 500px) {
+        position: absolute;
+        top: 24px;
+        left: 0;
+      }
     }
   }
 }

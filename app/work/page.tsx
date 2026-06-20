@@ -49,7 +49,6 @@ export default function Work() {
   }, [view]);
 
   const PADDING = 50;
-
   const minX = Math.min(...positions.map((p) => p.x)) - PADDING;
   const maxX = Math.max(...positions.map((p) => p.x)) + PADDING;
   const minY = Math.min(...positions.map((p) => p.y)) - PADDING;
@@ -59,19 +58,29 @@ export default function Work() {
   const lastPos = useRef({ x: 0, y: 0 });
   const rafId = useRef<number | null>(null);
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    setMousePos({ x: e.clientX, y: e.clientY });
+  // 마우스/터치 좌표 추출 헬퍼
+  const getPointerPos = (e: React.MouseEvent | React.TouchEvent) => {
+    if ('touches' in e) {
+      const touch = e.touches[0] ?? e.changedTouches[0];
+      return { x: touch.clientX, y: touch.clientY };
+    }
+    return { x: e.clientX, y: e.clientY };
+  };
+
+  const handlePointerMove = (e: React.MouseEvent | React.TouchEvent) => {
+    const pos = getPointerPos(e);
+    setMousePos(pos);
 
     if (isDragging.current && canvasRef.current) {
       didDrag.current = true;
       velocity.current = {
-        x: e.clientX - lastPos.current.x,
-        y: e.clientY - lastPos.current.y,
+        x: pos.x - lastPos.current.x,
+        y: pos.y - lastPos.current.y,
       };
-      lastPos.current = { x: e.clientX, y: e.clientY };
+      lastPos.current = pos;
 
-      const dx = e.clientX - dragStart.current.x;
-      const dy = e.clientY - dragStart.current.y;
+      const dx = pos.x - dragStart.current.x;
+      const dy = pos.y - dragStart.current.y;
       const newX = Math.min(-minX, Math.max(-maxX, canvasPos.current.x + dx));
       const newY = Math.min(-minY, Math.max(-maxY, canvasPos.current.y + dy));
       canvasRef.current.style.transform = `translate(${newX}px, ${newY}px) scale(${scaleRef.current})`;
@@ -112,24 +121,35 @@ export default function Work() {
     }
   };
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handlePointerDown = (e: React.MouseEvent | React.TouchEvent) => {
+    const pos = getPointerPos(e);
     isDragging.current = true;
     didDrag.current = false;
-    dragStart.current = { x: e.clientX, y: e.clientY };
-    lastPos.current = { x: e.clientX, y: e.clientY };
+    dragStart.current = pos;
+    lastPos.current = pos;
     velocity.current = { x: 0, y: 0 };
     if (rafId.current) cancelAnimationFrame(rafId.current);
   };
 
-  const handleMouseUp = (e: React.MouseEvent) => {
+  const handlePointerUp = (e: React.MouseEvent | React.TouchEvent) => {
     if (isDragging.current && canvasRef.current) {
-      const dx = e.clientX - dragStart.current.x;
-      const dy = e.clientY - dragStart.current.y;
-      const newX = Math.min(-minX, Math.max(-maxX, canvasPos.current.x + dx));
-      const newY = Math.min(-minY, Math.max(-maxY, canvasPos.current.y + dy));
-      canvasPos.current.x = newX;
-      canvasPos.current.y = newY;
-      canvasRef.current.style.transform = `translate(${newX}px, ${newY}px) scale(${scaleRef.current})`;
+      const newX = canvasPos.current.x;
+      const newY = canvasPos.current.y;
+
+      // up 시점엔 마지막 lastPos 기준으로 위치 확정
+      const dx = lastPos.current.x - dragStart.current.x;
+      const dy = lastPos.current.y - dragStart.current.y;
+      const confirmedX = Math.min(
+        -minX,
+        Math.max(-maxX, canvasPos.current.x + dx),
+      );
+      const confirmedY = Math.min(
+        -minY,
+        Math.max(-maxY, canvasPos.current.y + dy),
+      );
+      canvasPos.current.x = confirmedX;
+      canvasPos.current.y = confirmedY;
+      canvasRef.current.style.transform = `translate(${confirmedX}px, ${confirmedY}px) scale(${scaleRef.current})`;
 
       // 관성 시작
       if (rafId.current) cancelAnimationFrame(rafId.current);
@@ -218,9 +238,12 @@ export default function Work() {
   return (
     <main
       className='work'
-      onMouseMove={handleMouseMove}
-      onMouseDown={view === 'spiral' ? handleMouseDown : undefined}
-      onMouseUp={view === 'spiral' ? handleMouseUp : undefined}
+      onMouseMove={handlePointerMove}
+      onTouchMove={handlePointerMove}
+      onMouseDown={view === 'spiral' ? handlePointerDown : undefined}
+      onTouchStart={view === 'spiral' ? handlePointerDown : undefined}
+      onMouseUp={view === 'spiral' ? handlePointerUp : undefined}
+      onTouchEnd={view === 'spiral' ? handlePointerUp : undefined}
       onWheel={handleWheel}
     >
       <div className='work-view'>

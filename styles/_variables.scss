@@ -8,28 +8,35 @@
   --work-text: 5rem;
   --footer-text: 1.25rem;
   --footer-i: 0.75rem;
-  --footer-en: 3.75rem;
+  --footer-en: 4.25rem;
   --footer-ko: 1rem;
 }
 
 @media (width <= 1440px) {
   :root {
-    --footer-en: 5vw;
+    --footer-en: 3.75rem;
     --footer-ko: 0.75rem;
   }
 }
 
-@media (width <= 1024px) {
+@media (width <= 1200px) {
   :root {
     --content-width: 85%;
     --typing-text: 2.5rem;
     --work-text: 4rem;
+    --footer-en: 3rem;
+  }
+}
+
+@media (width <= 768px) {
+  :root {
+    --footer-en: 2.75rem;
   }
 }
 
 @media (width <= 500px) {
   :root {
-    --footer-en: 6.5vw;
+    --footer-en: 1.5rem;
     --typing-text: 1.25rem;
     --work-text: 2rem;
     --footer-text: 0.75rem;

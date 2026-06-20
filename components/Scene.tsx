@@ -146,7 +146,6 @@ export default function Scene() {
           meshesRef.current.push(child);
           initialYMap.set(child, child.position.y);
 
-          // 초기 머테리얼 설정
           if (mirrorObjects.includes(child.name))
             child.material = mirrorMaterial;
           else if (darkObjects.includes(child.name))
@@ -157,16 +156,26 @@ export default function Scene() {
         }
       });
 
-      gltf.scene.position.set(0, -2, 0.4);
+      gltf.scene.position.set(0, -4, 0.4);
       gltf.scene.rotation.set(0.1885, -1.8221, -0.0628);
       gltf.scene.scale.set(1, 1, 1);
       scene.add(gltf.scene);
 
-      gsap.to(gltf.scene.position, {
-        y: 0.2,
-        duration: 1.2,
-        ease: 'power2.out',
-      });
+      const playEntrance = () => {
+        gsap.to(gltf.scene.position, {
+          y: 0.2,
+          duration: 1.4,
+          // ease: 'power4.out',
+        });
+      };
+
+      if (document.querySelector('.splash')) {
+        window.addEventListener('splash-complete', playEntrance, {
+          once: true,
+        });
+      } else {
+        playEntrance();
+      }
     });
 
     const handleResize = () => {

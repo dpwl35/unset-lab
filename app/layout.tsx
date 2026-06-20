@@ -7,6 +7,7 @@ import Header from '@/components/Header';
 import SmoothScroll from '@/components/SmoothScroll';
 import LoadHandler from '@/components/LoadHandler';
 import Loader from '@/components/Loader';
+import Splash from '@/components/Splash';
 const azeretMono = Azeret_Mono({
   subsets: ['latin'],
   variable: '--font-azeret-mono',
@@ -42,6 +43,7 @@ export default function RootLayout({
       className={`${azeretMono.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body>
+        <Splash />
         <SmoothScroll />
         <Header />
         <PageTransition>{children}</PageTransition>
