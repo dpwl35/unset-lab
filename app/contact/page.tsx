@@ -201,12 +201,12 @@ export default function Contact() {
       </div>
 
       <ul className='footer-info'>
-        <li className='footer-info-email'>
+        {/* <li className='footer-info-email'>
           <i>email</i>contact@unsetlab.com
         </li>
         <li className='footer-info-address'>
           <i>address</i>Seoul, republic of Korea
-        </li>
+        </li> */}
         <li className='footer-info-copy'>© 2026 unsetlab</li>
       </ul>
     </main>
